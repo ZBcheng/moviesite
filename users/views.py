@@ -56,11 +56,11 @@ class RegisterView(APIView):
         return Response(serializer.data)
 
 
-class UserListView(generics.ListAPIView):
+class UserView(generics.ListAPIView):
 
     serializer_class = UserProfileSerializer
 
     def get_queryset(self):
         username = self.request.query_params.get('username')
-        user = UserProfile.objects.get(username=username)
+        user = UserProfile.objects.filter(username=username)
         return user

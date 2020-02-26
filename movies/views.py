@@ -51,8 +51,8 @@ class DirectorNameGetter(AbstractGetter):
         Args:
             keywords: name of the director
         '''
-        director = Person.objects.get(name=keywords)
-        movies = Movie.objects.filter(directors=director)
+        # director = Person.objects.get(name=keywords)
+        movies = Movie.objects.filter(directors__name__icontains=keywords)
         return movies
 
 
@@ -64,8 +64,8 @@ class ActorNameGetter(AbstractGetter):
         Args:
             keywords: name of the actor
         '''
-        actor = Person.objects.get(name=keywords)
-        movies = Movie.objects.filter(actors=actor)
+        # actor = Person.objects.get(name=keywords)
+        movies = Movie.objects.filter(actors__name__icontains=keywords)
         return movies
 
 

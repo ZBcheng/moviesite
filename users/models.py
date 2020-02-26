@@ -13,7 +13,7 @@ class UserProfile(AbstractUser):
     username = models.CharField(
         max_length=20, verbose_name='用户名', unique=True, blank=True)
     avatar = models.ImageField(
-        verbose_name='头像', blank=True, default='/upload/avatar/sausages.jpg')
+        verbose_name='头像', blank=True, default='avatar/sausages.jpg')
     email = models.EmailField(max_length=30, verbose_name='邮箱', unique=True)
     password = models.CharField(max_length=150, verbose_name='密码')
     stored_movies = models.ManyToManyField(

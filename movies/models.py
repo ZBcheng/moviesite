@@ -11,7 +11,6 @@ class Person(models.Model):
     desc = models.TextField(verbose_name='简介')
     photo = models.ImageField(
         upload_to='person', verbose_name='照片', null=True, blank=True)
-    # pic = models.ImageField()
 
     def __str__(self):
         return self.name

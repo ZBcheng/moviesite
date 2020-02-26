@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from .models import Category
-from .models import Movie
+from .models import Movie, Category
 
 
 class CategorySerializer(serializers.ModelSerializer):

@@ -1,11 +1,12 @@
 from rest_framework import serializers
 
+from movies.serializers import MovieSerializer
 from .models import UserProfile
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    stored_movies = serializers.StringRelatedField(many=True)
+    # stored_movies = MovieSerializer
 
     class Meta:
         model = UserProfile
-        fields = ('username', 'email', 'phone', 'stored_movies')
+        fields = ('phone', 'username', 'avatar', 'email')
