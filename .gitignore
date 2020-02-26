@@ -1,0 +1,8 @@
+douban_supply_box/
+db_super_airdrop/
+moviesite/settings.py
+.vscode/
+.idea/
+.DS_Store
+__pycache__/
+*/__pycache__/
