@@ -20,11 +20,21 @@ def rebulid_db(db_name):
     pg_handler.execute(f"CREATE DATABASE {db_name}")
 
 
+def inline(word, list_):
+    count = 0
+    for item in list_:
+        count += item.count(word)
+    return count
+
+
+def outline(word, list_):
+    count = 0
+    for item in list_:
+        if word in set(item):
+            count += 1
+    return count
+
+
 if __name__ == "__main__":
-    freq = {"0": "1111", "1": "222"}
-    for i in range(4, 5):
-        print(i)
-        i *= 2 / 3
-    print(i)
-    # create_db('haha')
-    # rebulid_db('moviesite')
+    create_db('haha')
+    rebulid_db('moviesite')
