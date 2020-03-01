@@ -57,6 +57,10 @@ class RegisterView(APIView):
 
 
 class UserView(generics.ListAPIView):
+    '''
+    获取用户信息
+    request.method == 'GET'
+    '''
 
     serializer_class = UserProfileSerializer
 

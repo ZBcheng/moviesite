@@ -51,7 +51,6 @@ class MovieCommentView(APIView):
 
         params = request.query_params.dict()
         movie_name = params.pop("name")
-        movie = Movie.objects.get(name=movie_name)
-        comment = Comment.objects.get(link_movie=movie)
+        comment = Comment.objects.filter(link_movie__name=movie_name)[:1]
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
