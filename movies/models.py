@@ -42,7 +42,7 @@ class Movie(models.Model):
     length = models.IntegerField(verbose_name='片长(分钟)')
     desc = models.TextField(verbose_name='简介')
     category = models.ManyToManyField(Category, verbose_name='类型')
-    score = models.IntegerField(verbose_name='评分', default=0)
+    score = models.FloatField(verbose_name='评分', default=0)
     like_count = models.IntegerField(verbose_name='点赞数', default=0)
     comment_count = models.IntegerField(verbose_name='评论数', default=0)
     directors = models.ManyToManyField(
