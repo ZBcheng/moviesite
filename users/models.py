@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 from movies.models import Movie
-from movies.models import Category
+from movies.models import MovieCategory
 
 # Create your models here.
 
@@ -18,7 +18,7 @@ class UserProfile(AbstractUser):
     email = models.EmailField(max_length=30, verbose_name='邮箱', unique=True)
     password = models.CharField(max_length=150, verbose_name='密码')
     saved_categories = models.ManyToManyField(
-        Category, verbose_name='关注标题', null=True, blank=True)
+        MovieCategory, verbose_name='关注标题', null=True, blank=True)
     stored_movies = models.ManyToManyField(
         Movie, verbose_name='收藏电影', blank=True, null=True)
 

@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Movie
-from .models import Person, Category
+from .models import Person, MovieCategory
 from .serializers import MovieSerializer
-from .serializers import CategorySerializer
+from .serializers import MovieCategorySerializer
 
 # Create your views here.
 
@@ -18,7 +18,7 @@ class AbstractGetter(object):
         raise NotImplementedError
 
 
-class CategoryGetter(AbstractGetter):
+class MovieCategoryGetter(AbstractGetter):
     '''get movie by the type'''
 
     def get(self, keywords):
@@ -120,7 +120,7 @@ class MovieView(generics.ListAPIView):
         elif actor_name:
             getter = MovieGetter(ActorNameGetter(), actor_name)
         elif category:
-            getter = MovieGetter(CategoryGetter(), category)
+            getter = MovieGetter(MovieCategoryGetter(), category)
         return getter.get()
 
 
@@ -131,12 +131,12 @@ class MovieListView(generics.ListAPIView):
     serializer_class = MovieSerializer
 
 
-class CategoryListView(APIView):
+class MovieCategoryListView(APIView):
     '''获取电影类型列表'''
 
     def get(self, request):
-        categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True)
+        categories = MovieCategory.objects.all()
+        serializer = MovieCategorySerializer(categories, many=True)
         return Response(serializer.data)
 
 

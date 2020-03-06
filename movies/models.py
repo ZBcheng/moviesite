@@ -3,6 +3,13 @@ from django.db import models
 # Create your models here.
 
 
+PERSON_CATEGORIES = (
+    ('0', '演员'),
+    ('1', '导演'),
+    ('2', '导演/演员')
+)
+
+
 class Person(models.Model):
     '''导演/演员'''
 
@@ -11,6 +18,8 @@ class Person(models.Model):
     desc = models.TextField(verbose_name='简介')
     photo = models.ImageField(
         upload_to='person', verbose_name='照片', null=True, blank=True)
+    category = models.CharField(
+        choices=PERSON_CATEGORIES, max_length=10, verbose_name='人员类型', default='0')
 
     def __str__(self):
         return self.name
@@ -20,7 +29,7 @@ class Person(models.Model):
         verbose_name_plural = verbose_name
 
 
-class Category(models.Model):
+class MovieCategory(models.Model):
     '''电影类型'''
     name = models.CharField(max_length=10, verbose_name='类型', unique=True)
 
@@ -41,7 +50,7 @@ class Movie(models.Model):
     area = models.CharField(max_length=10, verbose_name='地区')
     length = models.IntegerField(verbose_name='片长(分钟)')
     desc = models.TextField(verbose_name='简介')
-    category = models.ManyToManyField(Category, verbose_name='类型')
+    category = models.ManyToManyField(MovieCategory, verbose_name='类型')
     score = models.FloatField(verbose_name='评分', default=0)
     like_count = models.IntegerField(verbose_name='点赞数', default=0)
     comment_count = models.IntegerField(verbose_name='评论数', default=0)
