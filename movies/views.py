@@ -3,6 +3,7 @@ import json
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
 
 from .models import Movie
 from .models import Person, MovieCategory
@@ -124,14 +125,14 @@ class MovieView(generics.ListAPIView):
         return getter.get()
 
 
-class MovieListView(generics.ListAPIView):
+class MovieListView(CacheResponseMixin, generics.ListAPIView):
     '''获取电影列表'''
 
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
 
 
-class MovieCategoryListView(APIView):
+class MovieCategoryListView(CacheResponseMixin, APIView):
     '''获取电影类型列表'''
 
     def get(self, request):
@@ -141,7 +142,7 @@ class MovieCategoryListView(APIView):
 
 
 class LikeCountView(APIView):
-    '''点赞数视图'''
+    '''点赞或取消赞'''
 
     def post(self, request):
         request_body = json.loads(request.body)['data']
@@ -160,7 +161,7 @@ class LikeCountView(APIView):
 
 
 class CommentCountView(APIView):
-    '''评论数视图'''
+    '''添加评论'''
 
     def post(self, request):
         request_body = json.loads(request.body)['data']
