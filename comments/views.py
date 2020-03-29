@@ -38,7 +38,7 @@ class PublisherCommentView(APIView):
         movie_name = request_body['movie_name']
         content = request_body['content']
         publisher = UserProfile.objects.get(username=username)
-        link_movie = Movie.objects.get(name=movie_name)
+        link_movie = Movie.objects.get(name =movie_name)
         comment = Comment.objects.create(
             content=content, publisher=publisher, link_movie=link_movie)
         serializer = CommentSerializer(comment)

@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.settings import api_settings
+from rest_framework_jwt.settings import api_settings
 
 from .models import UserProfile
 from .serializers import UserProfileSerializer
@@ -13,18 +13,31 @@ from .serializers import UserProfileSerializer
 
 
 class LoginView(APIView):
-    '''
-    登录视图
-    request.method == 'POST'
-    '''
+    '''user login'''
 
     def post(self, request):
+
         request_body = json.loads(request.body, encoding='utf-8')['data']
         username = request_body['username']
-        print(username)
         password = request_body['password']
-        user = authenticate(username=username, password=password)
+        # user = authenticate(username=username, password=password)
 
+        print(username)
+        print(password)
+
+        try:
+            user = authenticate(username=username, password=password)
+        except UserProfile.DoesNotExist:
+            print("user does not exist")
+            return Response("user does not exist")
+        # except users.models.UserProfile.DoesNotExist as e:
+            # raise(e)
+
+        # if user.password != make_password(password):
+        #     print("wrong password")
+        #     return Response("wrong password")
+
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
         print("password correct")
         login(request, user)
         jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
