@@ -1,6 +1,7 @@
 import os
 import json
 import base64
+import datetime
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
@@ -10,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
 
 from moviesite.settings import MEDIA_URL
+from message.models import Message
 from .models import UserProfile
 from .serializers import UserProfileSerializer
 # Create your views here.
@@ -59,15 +61,33 @@ class RegisterView(APIView):
     '''
 
     def post(self, request):
-        request_body = json.loads(request.body, encoding='utf-8')
+        request_body = json.loads(request.body, encoding='utf-8')['data']
         username = request_body['username']
-        phone = request_body['phone']
-        email = request_body['email']
         password = request_body['password']
-        user = UserProfile.objects.create(
-            username=username, phone=phone, email=email, password=make_password(password))
+
+        try:
+            phone = request_body['phone']
+        except KeyError:
+            phone = None
+
+        try:
+            email = request_body['email']
+        except KeyError:
+            email = None
+
+        try:
+            avatar = request_body['avatar']
+        except KeyError:
+            avatar = None
+
+        if avatar:
+            user = user = UserProfile.objects.create(
+                username=username, phone=phone, email=email, password=make_password(password), avatar=avatar)
+        else:
+            user = UserProfile.objects.create(
+                username=username, phone=phone, email=email, password=make_password(password))
         user.is_superuser = False
-        user.save()
+        create_message(receiver=user)
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
 
@@ -123,9 +143,47 @@ class UserUpdateView(APIView):
         return Response(serializer.data)
 
 
+def create_bot() -> UserProfile:
+    '''create a bot if it does not exist'''
+
+    bot = UserProfile.objects.create(
+        username='bot', email='bot@icloud.com', password=make_password('bot'), avatar='avatar/bot.png')
+    return bot
+
+
+def create_message(receiver: UserProfile) -> (Message, Message):
+    '''
+    Create a welcome message 👏 and tips 🏷️
+    Args:
+        receiver: the receiver fo the message
+    '''
+
+    try:
+        bot = UserProfile.objects.get(username='bot')
+    except:
+        bot = create_bot()
+
+    message_title = 'Welcome'
+    message_content = 'Hello!' + receiver.username + \
+        '同学，欢迎加入电影网站👏，快去看看有哪些好看的电影吧'
+    send_time = str(datetime.datetime.today())[:10]
+
+    message_welcome = Message.objects.create(
+        message_title=message_title, message_content=message_content, sender=bot, message_status='0', send_time=send_time)
+    message_welcome.receiver.add(receiver)
+    message_welcome.save()
+
+    message_title = 'Tips'
+    message_content = '点击信息标题可以进入详情页面，点击头像可以查看发件人信息，在查看信息详情后，该信息将会被标记为已读😁'
+    message_tips = Message.objects.create(
+        message_title=message_title, message_content=message_content, sender=bot, message_status='0', send_time=send_time)
+    message_tips.receiver.add(receiver)
+    message_tips.save()
+
+
 def get_real_url(raw_url: str) -> str:
     '''
-    remove trush data in raw_url
+    Remove trush data in raw_url
     Args:
         raw_url: raw url get from frontend
     '''
@@ -135,7 +193,7 @@ def get_real_url(raw_url: str) -> str:
 
 def save_as_img(img_name: str, b64_url: str):
     '''
-    convert image url to jpg
+    Convert image url to jpg
     Args:
         img_name: the name of the jpg file
         b64_url: a str object encoded with base64

@@ -25,6 +25,6 @@ urlpatterns = [
     path('movies/', include('movies.urls')),
     path('users/', include('users.urls')),
     path('comments/', include('comments.urls')),
-    path('mails/', include('mails.urls')),
+    path('mails/', include('message.urls')),
     url('upload/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT})
 ]
