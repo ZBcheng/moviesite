@@ -160,7 +160,7 @@ def create_message(receiver: UserProfile) -> (Message, Message):
 
     try:
         bot = UserProfile.objects.get(username='bot')
-    except:
+    except UserProfile.DoesNotExist:
         bot = create_bot()
 
     message_title = 'Welcome'

@@ -22,7 +22,7 @@ class MessageListView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        '''create a message'''
+        '''Create a message'''
         request_body = json.loads(request.body, encoding='utf-8')['data']
         message_title = request_body['message_title']  # 信息标题
         message_content = request_body['message_content']  # 信息内容
@@ -48,7 +48,7 @@ class MessageListView(APIView):
 
 
 class MessageReceivedView(generics.ListAPIView):
-    '''get received messages'''
+    '''Get received messages'''
 
     serializer_class = MessageSerializer
 
@@ -60,7 +60,7 @@ class MessageReceivedView(generics.ListAPIView):
 
 
 class MessageSentView(generics.ListAPIView):
-    '''get sent messages'''
+    '''Get sent messages'''
 
     serializer_class = MessageSerializer
 
@@ -71,7 +71,7 @@ class MessageSentView(generics.ListAPIView):
 
 
 class MessageUnreadView(generics.ListAPIView):
-    '''get the view of unread messages'''
+    '''Get the view of unread messages'''
 
     serializer_class = MessageSerializer
 
@@ -83,7 +83,7 @@ class MessageUnreadView(generics.ListAPIView):
 
 
 class MessageUnreadNum(APIView):
-    '''get the num of unread messages'''
+    '''Get the num of unread messages'''
 
     def get(self, request):
         username = request.query_params.get('username')

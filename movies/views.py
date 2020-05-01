@@ -40,7 +40,7 @@ class NameGetter(AbstractGetter):
         Args:
             keywords: name of the movie
         '''
-        movies = Movie.objects.get(name=keywords)
+        movies = Movie.objects.filter(name__icontains=keywords)
         return movies
 
 
@@ -122,7 +122,20 @@ class MovieView(generics.ListAPIView):
             getter = MovieGetter(ActorNameGetter(), actor_name)
         elif category:
             getter = MovieGetter(MovieCategoryGetter(), category)
+
+        print(getter.get())
         return getter.get()
+
+
+class SingleView(APIView):
+    '''根据id获取电影'''
+
+    def get(self, request):
+        movie_id = request.query_params.get('id')
+        movie = Movie.objects.get(id=movie_id)
+        serializer = MovieSerializer(movie)
+
+        return Response(serializer.data)
 
 
 class MovieListView(CacheResponseMixin, generics.ListAPIView):
@@ -138,6 +151,7 @@ class MovieCategoryListView(CacheResponseMixin, APIView):
     def get(self, request):
         categories = MovieCategory.objects.all()
         serializer = MovieCategorySerializer(categories, many=True)
+
         return Response(serializer.data)
 
 
@@ -157,6 +171,7 @@ class LikeCountView(APIView):
             raise Exception('undefined cal')
         movie.save()
         serializer = MovieSerializer(movie)
+
         return Response(serializer.data)
 
 
@@ -170,4 +185,5 @@ class CommentCountView(APIView):
         movie.comment_count += 1
         movie.save()
         serializer = MovieSerializer(movie)
+
         return Response(serializer.data)
