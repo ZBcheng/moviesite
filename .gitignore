@@ -6,5 +6,6 @@ moviesite/settings.py
 .DS_Store
 __pycache__/
 */__pycache__/
+upload/*
 
 tempCodeRunnerFile.py

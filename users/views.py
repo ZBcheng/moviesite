@@ -107,7 +107,7 @@ class UserView(generics.ListAPIView):
 
 
 class UserUpdateView(APIView):
-    '''update the view of a specific user'''
+    '''Update the view of a specific user'''
 
     def put(self, request):
         request_body = json.loads(request.body, encoding='utf-8')['data']

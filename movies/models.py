@@ -62,6 +62,7 @@ class Movie(models.Model):
         verbose_name='上映日期', null=True, blank=True)
     post = models.ImageField(
         upload_to='movie', verbose_name='电影封面', null=True)
+    video = models.FileField(upload_to='video', verbose_name='视频', null=True)
 
     def __str__(self):
         return self.name

@@ -23,6 +23,7 @@ from moviesite.settings import MEDIA_ROOT
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('movies/', include('movies.urls')),
+    path('messages/', include('message.urls')),
     path('users/', include('users.urls')),
     path('comments/', include('comments.urls')),
     path('mails/', include('message.urls')),
