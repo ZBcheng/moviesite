@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Movie, MovieCategory
+from .models import Movie, MovieCategory, Compilation
 
 
 class MovieCategorySerializer(serializers.ModelSerializer):
@@ -17,4 +17,13 @@ class MovieSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movie
+        fields = '__all__'
+
+
+class CompilationSerializer(serializers.ModelSerializer):
+
+    content_movies = MovieSerializer(many=True)
+
+    class Meta:
+        model = Compilation
         fields = '__all__'

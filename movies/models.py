@@ -70,3 +70,20 @@ class Movie(models.Model):
     class Meta:
         verbose_name = '电影'
         verbose_name_plural = verbose_name
+
+
+class Compilation(models.Model):
+    '''合辑'''
+
+    name = models.CharField(max_length=30, verbose_name='合辑名称')
+    desc = models.TextField(verbose_name='合辑简介')
+    post = models.ImageField(upload_to='video', verbose_name='专辑封面')
+    content_movies = models.ManyToManyField(
+        Movie, related_name='comp_movies', verbose_name='电影')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = '电影合辑'
+        verbose_name_plural = verbose_name

@@ -92,6 +92,16 @@ class RegisterView(APIView):
         return Response(serializer.data)
 
 
+class UserListView(generics.ListAPIView):
+    '''获取用户列表'''
+
+    serializer_class = UserProfileSerializer
+
+    def get_queryset(self):
+        user = UserProfile.objects.filter()
+        return user
+
+
 class UserView(generics.ListAPIView):
     '''
     获取用户信息

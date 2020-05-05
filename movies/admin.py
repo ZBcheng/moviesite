@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Person
-from .models import Movie, MovieCategory
+from .models import Movie, MovieCategory, Compilation
 # Register your models here.
 
 
@@ -25,6 +25,12 @@ class MovieAdmin(admin.ModelAdmin):
     list_filter = ('category', 'area', 'directors', 'actors')
 
 
+class CompilationAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+
+
 admin.site.register(Person, PersonAdmin)
 admin.site.register(MovieCategory, MovieCategoryAdmin)
 admin.site.register(Movie, MovieAdmin)
+admin.site.register(Compilation, CompilationAdmin)

@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
 
-from .models import Movie
+from .models import Movie, Compilation
 from .models import Person, MovieCategory
-from .serializers import MovieSerializer
+from .serializers import MovieSerializer, CompilationSerializer
 from .serializers import MovieCategorySerializer
 
 # Create your views here.
@@ -123,8 +123,28 @@ class MovieView(generics.ListAPIView):
         elif category:
             getter = MovieGetter(MovieCategoryGetter(), category)
 
-        print(getter.get())
         return getter.get()
+
+
+class CompilationListView(generics.ListAPIView):
+    '''获取合辑列表'''
+
+    serializer_class = CompilationSerializer
+
+    def get_queryset(self):
+        compilations = Compilation.objects.filter()
+        return compilations
+
+
+class CompilationView(generics.ListAPIView):
+    '''根据name获取合辑'''
+
+    serializer_class = CompilationSerializer
+
+    def get_queryset(self):
+        comp_name = self.request.query_params.get('name')
+        compilation = Compilation.objects.filter(name__icontains=comp_name)
+        return compilation
 
 
 class SingleView(APIView):
