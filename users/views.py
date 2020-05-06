@@ -12,6 +12,8 @@ from rest_framework_jwt.settings import api_settings
 
 from moviesite.settings import MEDIA_URL
 from message.models import Message
+from movies.models import Movie
+from movies.serializers import MovieSerializer
 from .models import UserProfile
 from .serializers import UserProfileSerializer
 # Create your views here.
@@ -151,6 +153,49 @@ class UserUpdateView(APIView):
         user.save()
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
+
+
+class StoreUpView(APIView):
+    '''添加收藏电影'''
+
+    def put(self, request):
+        request_body = json.loads(request.body, encoding='utf-8')['data']
+        username = request_body['usre_name']
+        user = UserProfile.objects.get(username=username)
+
+        movie_id = request_body['movie_id']
+        movie = Movie.objects.get(id=movie_id)
+
+        op = request_body['op']
+        if op == 0:
+            # 添加到收藏
+            user.stored_movies.add(movie)
+        elif op == 1:
+            # 取消收藏
+            user.stored_movies.remove(movie)
+
+        user.save()
+
+        serializer = UserProfileSerializer(user)
+
+        return Response(serializer.data)
+
+
+class UserStoredView(generics.ListAPIView):
+
+    serializer_class = MovieSerializer
+
+    def get_queryset(self):
+        username = self.request.query_params.get('username')
+        user = UserProfile.objects.get(username=username)
+
+        movie_id = self.request.query_params.get('movie_id')
+        if movie_id:
+            contains = user.stored_movies.filter(id=movie_id)
+        else:
+            contains = user.stored_movies.filter()
+
+        return contains
 
 
 def create_bot() -> UserProfile:
