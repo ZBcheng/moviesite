@@ -32,6 +32,18 @@ class MovieCategoryGetter(AbstractGetter):
         return movies
 
 
+class IDGetter(AbstractGetter):
+    '''get movie by the name of the movie'''
+
+    def get(self, keywords):
+        '''
+        Args:
+            keywords: name of the movie
+        '''
+        movies = Movie.objects.filter(id=keywords)
+        return movies
+
+
 class NameGetter(AbstractGetter):
     '''get movie by the name of the movie'''
 
@@ -94,6 +106,12 @@ class MovieView(generics.ListAPIView):
 
     def get_queryset(self):
         params = self.request.query_params.dict()
+
+        try:
+            id = params.pop('id')
+        except KeyError:
+            id = None
+
         try:
             name = params.pop('name')
         except KeyError:
@@ -114,7 +132,9 @@ class MovieView(generics.ListAPIView):
         except KeyError:
             category = None
 
-        if name:
+        if id:
+            getter = MovieGetter(IDGetter(), id)
+        elif name:
             getter = MovieGetter(NameGetter(), name)
         elif director_name:
             getter = MovieGetter(DirectorNameGetter(), director_name)
