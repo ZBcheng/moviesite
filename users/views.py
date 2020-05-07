@@ -167,6 +167,7 @@ class StoreUpView(APIView):
         movie = Movie.objects.get(id=movie_id)
 
         op = request_body['op']
+
         if op == 0:
             # 添加到收藏
             user.stored_movies.add(movie)
@@ -190,10 +191,13 @@ class UserStoredView(generics.ListAPIView):
         user = UserProfile.objects.get(username=username)
 
         movie_id = self.request.query_params.get('movie_id')
-        if movie_id:
-            contains = user.stored_movies.filter(id=movie_id)
-        else:
+        print(movie_id)
+        print(type(movie_id))
+
+        if not movie_id or movie_id == 'undefined':
             contains = user.stored_movies.filter()
+        else:
+            contains = user.stored_movies.filter(id=movie_id)
 
         return contains
 

@@ -108,10 +108,11 @@ class MovieView(generics.ListAPIView):
         params = self.request.query_params.dict()
 
         try:
-            id = params.pop('id')
+            movie_id = params.pop('movie_id')
         except KeyError:
-            id = None
+            movie_id = None
 
+        print(movie_id)
         try:
             name = params.pop('name')
         except KeyError:
@@ -132,8 +133,8 @@ class MovieView(generics.ListAPIView):
         except KeyError:
             category = None
 
-        if id:
-            getter = MovieGetter(IDGetter(), id)
+        if movie_id:
+            getter = MovieGetter(IDGetter(), movie_id)
         elif name:
             getter = MovieGetter(NameGetter(), name)
         elif director_name:
