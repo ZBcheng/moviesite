@@ -20,8 +20,7 @@ class MovieCategoryAdmin(admin.ModelAdmin):
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('name', 'link_addr', 'language',
                     'area', 'length')
-    search_fields = ('name', 'area', 'language',
-                     'category', 'directors', 'actors')
+    search_fields = ('name', 'area', 'language')
     list_filter = ('category', 'area', 'directors', 'actors')
 
 

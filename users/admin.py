@@ -6,7 +6,8 @@ from .models import UserProfile
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('username', 'phone', 'email')
-    search_fileds = ('username', 'phone', 'email')
+    search_fields = ('username', 'phone', 'email')
+    list_filter = ('username', 'phone', 'email')
 
 
 admin.site.register(UserProfile, UserProfileAdmin)

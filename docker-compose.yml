@@ -1,19 +1,31 @@
-# version: '3'
+version: '3'
 
-# services:
-#     db:
-#         image: postgres
-#         ports:
-#             - "5432:5432"
-#         environment:
-#             POSTGRES_DB: "db"
-#             POSTGRES_HOST_AUTH_METHOD: "trust"
-#     web:
-#         build: .
-#         command: python manage.py runserver 0.0.0.0:8000
-#         volumes:
-#             - .:/moviesite
-#         ports:
-#             - "8000:8000"
-#         depends_on:
-#             - db
+services:
+  db:
+    image: postgres
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    volumes:
+        - "dbdata:/var/lib/postgresql/data"
+  cache:
+    image: redis
+  web:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  noti:
+    image: sec-noti
+    ports:
+      - "7000:7000"
+    depends_on:
+      - db
+      - cache
+
+volumes:
+  dbdata:

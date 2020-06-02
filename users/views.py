@@ -191,8 +191,6 @@ class UserStoredView(generics.ListAPIView):
         user = UserProfile.objects.get(username=username)
 
         movie_id = self.request.query_params.get('movie_id')
-        print(movie_id)
-        print(type(movie_id))
 
         if not movie_id or movie_id == 'undefined':
             contains = user.stored_movies.filter()
